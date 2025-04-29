@@ -1,0 +1,11 @@
+<html>
+    <head><title>main app</title></head>
+    <body>
+        <h1>メインページ</h1>
+        <form method="post" action="/logout/">
+            {% csrf_token %}
+            <input type="submit" value="ログアウト">
+        </form>
+
+    </body>
+</html>
