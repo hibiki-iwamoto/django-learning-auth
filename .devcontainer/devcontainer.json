@@ -1,0 +1,50 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Python 3, Poetry & Django",
+    // docker-compose.yml を使って複数のコンテナ（アプリ用とDB用）を定義・起動
+    "dockerComposeFile": "docker-compose.yml",
+
+    // docker-compose.yml 内のどのサービスを開発コンテナとして使用するか指定
+    "service": "app",
+
+    // VS Code がコンテナ内で開くフォルダを指定
+    // ${localWorkspaceFolderBasename} はローカルで開いているフォルダ名に置き換わる
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+    // コンテナが作成された後に実行するコマンド
+    "postCreateCommand": "echo 'Container created. Ready to code!'",
+    // 必要に応じてDBマイグレーションなどを追加:
+    // "postCreateCommand": "poetry run python manage.py migrate",
+
+    // VS Code の設定（コンテナ内）
+    "customizations": {
+        "vscode": {
+            // 推奨される拡張機能
+            "extensions": [
+                "ms-python.python",              // Python 拡張機能
+                "ms-python.debugpy",             // Python デバッガー
+                "ms-python.vscode-pylance",      // Python 言語サーバー
+                //"visualstudioexptteam.vscodeintellicode", // AI支援開発
+                "ms-azuretools.vscode-docker",   // Docker 拡張機能
+                "ms-ossdata.vscode-postgresql",  // PostgreSQL 拡張機能
+                "tamasfe.even-better-toml",      // TOML ファイル用 (pyproject.toml)
+                "batisteo.vscode-django"         // Django テンプレート用
+            ],
+            "settings": {
+                // Pythonインタープリターのパスを Poetry が管理するものに設定
+                // 通常、Poetry はコンテナ内に仮想環境を作成しない設定にするため、
+                // グローバルな Python を指すことが多い。
+                // Poetry が仮想環境を作成する場合は、そのパスを指定する必要がある。
+                // Dockerfile で `poetry config virtualenvs.create false` を設定しているため、以下で良いはず。
+                "python.defaultInterpreterPath": "/usr/local/bin/python"
+            }
+        }
+    },
+
+    // ポートフォワーディング (例: Djangoデフォルトの8000番)
+    // "forwardPorts": [8000, 5432],
+    "forwardPorts": [8000],
+
+    // コンテナ内で使用するユーザー (非rootユーザーを推奨)
+    "remoteUser": "vscode" // 一般的な非rootユーザー名
+}

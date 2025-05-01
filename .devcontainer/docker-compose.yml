@@ -1,0 +1,60 @@
+# .devcontainer/docker-compose.yml
+version: '1.0'
+
+services:
+  app:
+    # Dockerfile を使ってイメージをビルド
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # ここでPythonのバージョンを指定可能 (Dockerfile側でもARGで受け取る)
+        PYTHON_VERSION: '3.11' # 例
+
+    volumes:
+      # ローカルのプロジェクトフォルダ全体をコンテナのワークスペースにマウント
+      # '..' は docker-compose.yml が .devcontainer ディレクトリにあるため、
+      # その親ディレクトリ（プロジェクトルート）を指す
+      - ..:/workspaces/${localWorkspaceFolderBasename}:cached
+
+    # 環境変数 (Django設定などで使用)
+    environment:
+      # PostgreSQL 接続情報 (dbサービスと合わせる)
+      # DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
+      # POSTGRES_HOST: db
+      # POSTGRES_PORT: 5432
+      # POSTGRES_DB: postgres
+      # POSTGRES_USER: postgres
+      # POSTGRES_PASSWORD: postgres
+      # # Python の設定 (バッファリング無効化など)
+      # PYTHONUNBUFFERED: 1
+
+    # コンテナを起動し続けるためのコマンド
+    command: sleep infinity
+
+    # データベースコンテナ(db)が起動してからappコンテナを起動する
+    depends_on:
+      # - db
+
+    # コンテナ内のワーキングディレクトリ
+    working_dir: /workspaces/${localWorkspaceFolderBasename}
+
+#   db:
+#     # 公式のPostgreSQLイメージを使用
+#     image: postgres:16 # 必要に応じてバージョン変更
+#     restart: unless-stopped
+#     volumes:
+#       # DBデータを永続化するための名前付きボリューム
+#       - postgres-data:/var/lib/postgresql/data
+#     environment:
+#       # PostgreSQL の設定 (appサービスの環境変数と合わせる)
+#       POSTGRES_DB: postgres
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: postgres
+#     expose:
+#       # コンテナ間通信用にポートを開放 (ホストには公開しない)
+#       - 5432
+
+# volumes:
+#   # DBデータ永続化用の名前付きボリューム定義
+#   postgres-data:
