@@ -9,16 +9,16 @@ services:
       dockerfile: Dockerfile
       args:
         # ここでPythonのバージョンを指定可能 (Dockerfile側でもARGで受け取る)
-        PYTHON_VERSION: '3.11' # 例
+        PYTHON_VERSION: '3.11'
 
     volumes:
       # ローカルのプロジェクトフォルダ全体をコンテナのワークスペースにマウント
       # '..' は docker-compose.yml が .devcontainer ディレクトリにあるため、
       # その親ディレクトリ（プロジェクトルート）を指す
-      - ..:/workspaces/${localWorkspaceFolderBasename}:cached
+      - ..:/workspaces/django-learn-auth:cached
 
     # 環境変数 (Django設定などで使用)
-    environment:
+    # environment:
       # PostgreSQL 接続情報 (dbサービスと合わせる)
       # DATABASE_URL: postgresql://postgres:postgres@db:5432/postgres
       # POSTGRES_HOST: db
@@ -33,11 +33,11 @@ services:
     command: sleep infinity
 
     # データベースコンテナ(db)が起動してからappコンテナを起動する
-    depends_on:
+    # depends_on:
       # - db
 
     # コンテナ内のワーキングディレクトリ
-    working_dir: /workspaces/${localWorkspaceFolderBasename}
+    working_dir: /workspaces/django-learn-auth
 
 #   db:
 #     # 公式のPostgreSQLイメージを使用

@@ -14,10 +14,12 @@ RUN sudo apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && sudo apt-get autoremove -y && sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/*
 
 # Poetry のインストール
-USER vscode # 非rootユーザーでインストールすることが推奨される場合が多い
-ENV POETRY_HOME="/home/vscode/.local" \
-    PATH="/home/vscode/.local/bin:$PATH"
+# USER vscode # 非rootユーザーでインストールすることが推奨される場合が多い
+# ENV POETRY_HOME="/home/vscode/.local" \
+#     PATH="/home/vscode/.local/bin:$PATH"
 RUN curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH=/root/.local/bin:${PATH}
 
 # Poetry の設定: コンテナ内に仮想環境を作成しない (コンテナ自体が環境のため)
 RUN poetry config virtualenvs.create false
@@ -32,5 +34,5 @@ COPY pyproject.toml poetry.lock* ./
 RUN poetry install --no-interaction --no-ansi --no-root
 
 # ワークスペースに移動し、一時ファイルをクリーンアップ
-WORKDIR /workspaces/${localWorkspaceFolderBasename}
+WORKDIR /workspaces/django-learn-auth
 RUN rm -rf /tmp/poetry_install

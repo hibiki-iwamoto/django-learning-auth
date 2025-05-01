@@ -9,7 +9,7 @@
 
     // VS Code がコンテナ内で開くフォルダを指定
     // ${localWorkspaceFolderBasename} はローカルで開いているフォルダ名に置き換わる
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "workspaceFolder": "/workspaces/django-learn-auth",
 
     // コンテナが作成された後に実行するコマンド
     "postCreateCommand": "echo 'Container created. Ready to code!'",
