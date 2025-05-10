@@ -14,12 +14,12 @@ RUN sudo apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && sudo apt-get autoremove -y && sudo apt-get clean -y && sudo rm -rf /var/lib/apt/lists/*
 
 # Poetry のインストール
-# USER vscode # 非rootユーザーでインストールすることが推奨される場合が多い
-# ENV POETRY_HOME="/home/vscode/.local" \
-#     PATH="/home/vscode/.local/bin:$PATH"
+USER vscode
+ENV POETRY_HOME="/home/vscode/.local" \
+    PATH="/home/vscode/.local/bin:$PATH"
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
-ENV PATH=/root/.local/bin:${PATH}
+# ENV PATH=/root/.local/bin:${PATH}
 
 # Poetry の設定: コンテナ内に仮想環境を作成しない (コンテナ自体が環境のため)
 RUN poetry config virtualenvs.create false
